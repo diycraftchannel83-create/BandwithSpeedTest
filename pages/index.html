@@ -5,16 +5,16 @@
 <meta name="theme-color" content="#081426">
 <title>Bandwidth Speed Test — Wins Mediatama</title>
 <style>
-:root{color-scheme:dark;--bg:#081426;--panel:#12243a;--cyan:#35d7f2;--muted:#9cb0c7;--line:#24425d}
+:root{color-scheme:dark;--bg:#081426;--panel:#12243a;--cyan:#35d7f2;--muted:#9cb0c7;--line:#24425d;--gauge-color:#35d7f2}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% 10%,#173451,var(--bg) 55%);color:#fff;font:16px system-ui,sans-serif;min-height:100vh}
 main{max-width:900px;margin:auto;padding:28px 18px 48px;text-align:center}.brand{color:var(--cyan);font-weight:800;letter-spacing:2px;font-size:12px}
 h1{font-size:clamp(25px,5vw,38px);margin:8px 0}.sub{color:var(--muted);font-size:14px}
 .gauge{position:relative;width:min(88vw,360px);height:230px;margin:28px auto 18px;overflow:hidden}
 .gauge svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
 .gauge-track{fill:none;stroke:#1b3a55;stroke-width:13;stroke-linecap:round}
-.gauge-active{fill:none;stroke:var(--cyan);stroke-width:13;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;filter:drop-shadow(0 0 6px #35d7f2aa)}
-.needle{position:absolute;width:4px;height:128px;left:calc(50% - 2px);bottom:25px;background:linear-gradient(to top,#35d7f2,#ffffff);border-radius:8px;transform-origin:50% calc(100% - 2px);transform:rotate(-90deg);transition:transform .35s cubic-bezier(.2,.8,.2,1);z-index:2;box-shadow:0 0 10px #35d7f277}
-.needle-hub{position:absolute;left:calc(50% - 10px);bottom:17px;width:20px;height:20px;border-radius:50%;background:var(--cyan);border:4px solid #eafaff;z-index:4;box-shadow:0 0 14px #35d7f2aa}
+.gauge-active{fill:none;stroke:var(--gauge-color);stroke-width:13;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;filter:drop-shadow(0 0 6px #35d7f2aa)}
+.needle{position:absolute;width:4px;height:128px;left:calc(50% - 2px);bottom:25px;background:linear-gradient(to top,var(--gauge-color),#ffffff);border-radius:8px;transform-origin:50% calc(100% - 2px);transform:rotate(-90deg);transition:transform .35s cubic-bezier(.2,.8,.2,1);z-index:2;box-shadow:0 0 10px #35d7f277}
+.needle-hub{position:absolute;left:calc(50% - 10px);bottom:17px;width:20px;height:20px;border-radius:50%;background:var(--gauge-color);border:4px solid #eafaff;z-index:4;box-shadow:0 0 14px #35d7f2aa}
 .gauge-readout{position:absolute;left:0;right:0;bottom:44px;z-index:3;pointer-events:none;text-align:center;text-shadow:0 2px 8px #081426}
 #gaugeMode{font-size:13px;font-weight:900;letter-spacing:1.5px;color:var(--cyan)}
 #speed{font-size:42px;font-weight:500;line-height:1.1;margin-top:4px}
@@ -41,7 +41,7 @@ button:disabled{opacity:.5}.secondary{background:#1d3c56;color:#eaf4ff;border:1p
  </svg>
  <div class="needle" id="needle"></div><div class="needle-hub"></div>
  <div class="gauge-readout"><div id="gaugeMode">SPEED TEST</div><div id="speed">—</div><small>Mbps</small><div id="state">SIAP DIUJI</div></div>
- <span class="gauge-scale gauge-zero">0</span><span class="gauge-scale gauge-max">100 Mbps</span>
+ <span class="gauge-scale gauge-zero">0</span><span class="gauge-scale gauge-max">500 Mbps</span>
 </div>
 <div class="metrics">
 <div class="metric"><b>DOWNLOAD</b><strong id="download">— Mbps</strong></div>
@@ -76,11 +76,11 @@ import SpeedTest from 'https://cdn.jsdelivr.net/npm/@cloudflare/speedtest/+esm';
 const $=id=>document.getElementById(id);
 const HISTORY_KEY='wins_bandwidth_test_history_v1';
 let test;
-const GAUGE_MAX_MBPS=100;
+const GAUGE_MAX_MBPS=500;
 function updateGauge(mode,mbps){
  const safe=Math.max(0,Number.isFinite(mbps)?mbps:0);
  const ratio=Math.min(safe/GAUGE_MAX_MBPS,1);
- const angle=-90+(ratio*180);
+ const angle=-90+(ratio*180);\n const gaugeColor=safe>=300?'#ff4d6d':safe>=200?'#ff9f43':safe>=100?'#facc15':'#35d7f2';\n document.documentElement.style.setProperty('--gauge-color',gaugeColor);
  $('needle').style.transform='rotate('+angle+'deg)';
  $('gaugeMode').textContent=mode;
  $('speed').textContent=safe>0?safe.toFixed(1):'0.0';
