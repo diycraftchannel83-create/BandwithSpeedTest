@@ -121,7 +121,6 @@ function saveResult(result){
  const items=readHistory();items.unshift(item);localStorage.setItem(HISTORY_KEY,JSON.stringify(items.slice(0,30)));renderHistory();
 }
 $('start').addEventListener('click',()=>{
- if(!window.confirm('Pengujian dapat menggunakan hingga sekitar 200 MB kuota internet. Lanjutkan?'))return;
  $('start').disabled=true;$('error').textContent='';$('state').textContent='MENGUJI DOWNLOAD…';updateGauge('DOWNLOAD',0);
  for(const id of ['download','upload','latency','jitter'])$(id).textContent='…';
  try{
