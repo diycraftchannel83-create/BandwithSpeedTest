@@ -80,7 +80,9 @@ const GAUGE_MAX_MBPS=500;
 function updateGauge(mode,mbps){
  const safe=Math.max(0,Number.isFinite(mbps)?mbps:0);
  const ratio=Math.min(safe/GAUGE_MAX_MBPS,1);
- const angle=-90+(ratio*180);\n const gaugeColor=safe>=300?'#ff4d6d':safe>=200?'#ff9f43':safe>=100?'#facc15':'#35d7f2';\n document.documentElement.style.setProperty('--gauge-color',gaugeColor);
+ const angle=-90+(ratio*180);
+ const gaugeColor=safe>=300?'#ff4d6d':safe>=200?'#ff9f43':safe>=100?'#facc15':'#35d7f2';
+ document.documentElement.style.setProperty('--gauge-color',gaugeColor);
  $('needle').style.transform='rotate('+angle+'deg)';
  $('gaugeMode').textContent=mode;
  $('speed').textContent=safe>0?safe.toFixed(1):'0.0';
