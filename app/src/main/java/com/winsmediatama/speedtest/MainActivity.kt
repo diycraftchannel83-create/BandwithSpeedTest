@@ -26,7 +26,6 @@ private const val SPEED_TEST_URL = "https://bandwithspeedtest.diy-craft-channel-
 class MainActivity : ComponentActivity() {
     private var speedTestWebView: WebView? = null
     private lateinit var appOpenAdManager: AppOpenAdManager
-    private lateinit var appOpenAdManager: AppOpenAdManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
