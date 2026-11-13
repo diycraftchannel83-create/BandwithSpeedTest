@@ -120,7 +120,7 @@ function saveResult(result){
  const item={at:new Date().toISOString(),download:Number((result.getDownloadBandwidth()/1e6).toFixed(2)),upload:Number((result.getUploadBandwidth()/1e6).toFixed(2)),latency:Number(result.getUnloadedLatency().toFixed(1)),jitter:Number(result.getUnloadedJitter().toFixed(1))};
  const items=readHistory();items.unshift(item);localStorage.setItem(HISTORY_KEY,JSON.stringify(items.slice(0,30)));renderHistory();
 }
-$('start').addEventListener('click',()=>{
+window.startSpeedTestFromAndroid=()=>{
  $('start').disabled=true;$('error').textContent='';$('state').textContent='MENGUJI DOWNLOAD…';updateGauge('DOWNLOAD',0);
  for(const id of ['download','upload','latency','jitter'])$(id).textContent='…';
  try{
@@ -145,6 +145,13 @@ $('start').addEventListener('click',()=>{
   };
   test.play();
  }catch(e){$('error').textContent='Engine gagal dijalankan: '+e.message;$('state').textContent='GAGAL';$('start').disabled=false}
+};
+$('start').addEventListener('click',()=>{
+ if(window.AndroidAds&&typeof window.AndroidAds.requestInterstitial==='function'){
+  window.AndroidAds.requestInterstitial();
+ }else{
+  window.startSpeedTestFromAndroid();
+ }
 });
 $('clearHistory').addEventListener('click',()=>{if(confirm('Hapus semua riwayat pengujian yang tersimpan di perangkat ini?')){localStorage.removeItem(HISTORY_KEY);renderHistory()}});
 window.addEventListener('online',updateNetwork);window.addEventListener('offline',updateNetwork);
