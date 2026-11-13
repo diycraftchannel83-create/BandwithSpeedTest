@@ -55,14 +55,18 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun showInterstitialThenStartTest() {
-        // If an ad is not ready, never block the speed test.
-        if (!mobileAdsInitialized || !interstitialAdManager.isAdAvailable()) {
-            interstitialAdManager.loadAd()
-            startSpeedTestInWebView()
-            return
-        }
-        interstitialAdManager.showAd(this) {
-            startSpeedTestInWebView()
+        // JavascriptInterface callbacks run off the UI thread; all Mobile Ads
+        // operations and WebView interactions must be dispatched to the main thread.
+        runOnUiThread {
+            // If an ad is not ready, never block the speed test.
+            if (!mobileAdsInitialized || !interstitialAdManager.isAdAvailable()) {
+                interstitialAdManager.loadAd()
+                startSpeedTestInWebView()
+                return@runOnUiThread
+            }
+            interstitialAdManager.showAd(this) {
+                startSpeedTestInWebView()
+            }
         }
     }
 
