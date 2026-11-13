@@ -17,6 +17,10 @@ class AppOpenAdManager(context: Context) {
     private var appOpenAd: AppOpenAd? = null
     private var isLoadingAd = false
     private var isShowingAd = false
+    private var adLoadedAtMillis = 0L
+
+    private fun isAdFresh(): Boolean =
+        appOpenAd != null && System.currentTimeMillis() - adLoadedAtMillis < 4 * 60 * 60 * 1000L
 
     private val adUnitId: String
         get() = if (BuildConfig.DEBUG) {
@@ -26,7 +30,8 @@ class AppOpenAdManager(context: Context) {
         }
 
     fun loadAd() {
-        if (isLoadingAd || appOpenAd != null) return
+        if (isLoadingAd || isAdFresh()) return
+        appOpenAd = null
         isLoadingAd = true
         val request = AdRequest.Builder().build()
         AppOpenAd.load(
@@ -36,6 +41,7 @@ class AppOpenAdManager(context: Context) {
             object : AppOpenAd.AppOpenAdLoadCallback() {
                 override fun onAdLoaded(ad: AppOpenAd) {
                     appOpenAd = ad
+                    adLoadedAtMillis = System.currentTimeMillis()
                     isLoadingAd = false
                 }
 
@@ -49,8 +55,9 @@ class AppOpenAdManager(context: Context) {
 
     fun showAdIfAvailable(activity: Activity) {
         if (isShowingAd) return
-        val ad = appOpenAd
+        val ad = if (isAdFresh()) appOpenAd else null
         if (ad == null) {
+            appOpenAd = null
             loadAd()
             return
         }
