@@ -8,7 +8,6 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,7 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.viewinterop.AndroidView
 
-private const val SPEED_TEST_URL = "https://wins-bandwidth-speedtest.pages.dev/"
+private const val SPEED_TEST_URL = "https://bandwithspeedtest.diy-craft-channel-83.workers.dev/"
 
 class MainActivity : ComponentActivity() {
     private var speedTestWebView: WebView? = null
@@ -83,7 +82,7 @@ private fun SpeedTestWebScreen(onWebViewCreated: (WebView) -> Unit) {
                             request: WebResourceRequest
                         ): Boolean {
                             val host = request.url.host.orEmpty()
-                            return !(host == "wins-bandwidth-speedtest.pages.dev" ||
+                            return !(host == "bandwithspeedtest.diy-craft-channel-83.workers.dev" ||
                                 host == "speed.cloudflare.com" ||
                                 host == "github.com" ||
                                 host.endsWith(".pages.dev") ||
