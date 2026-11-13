@@ -48,6 +48,11 @@ jobs:
           echo "$RELEASE_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/release.keystore"
           test -s "$RUNNER_TEMP/release.keystore"
 
+      - name: Generate Android launcher icons from Speedtest.png
+        run: |
+          python3 -m pip install --user --quiet Pillow
+          python3 scripts/generate_launcher_icons.py
+
       - name: Build signed release APK and AAB
         env:
           RELEASE_STORE_FILE: ${{ runner.temp }}/release.keystore
