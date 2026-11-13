@@ -21,6 +21,11 @@ jobs:
         with:
           gradle-version: '8.9'
 
+      - name: Generate Android launcher icons from Speedtest.png
+        run: |
+          python3 -m pip install --user --quiet Pillow
+          python3 scripts/generate_launcher_icons.py
+
       - name: Assemble debug APK
         run: gradle assembleDebug
 
