@@ -1,7 +1,8 @@
 package com.winsmediatama.speedtest
 
 import android.annotation.SuppressLint
-import android.os.Bundle\nimport com.google.android.gms.ads.MobileAds
+import android.os.Bundle
+import com.google.android.gms.ads.MobileAds
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
@@ -23,10 +24,14 @@ import androidx.compose.ui.viewinterop.AndroidView
 private const val SPEED_TEST_URL = "https://bandwithspeedtest.diy-craft-channel-83.workers.dev/"
 
 class MainActivity : ComponentActivity() {
-    private var speedTestWebView: WebView? = null\n    private lateinit var appOpenAdManager: AppOpenAdManager
+    private var speedTestWebView: WebView? = null
+    private lateinit var appOpenAdManager: AppOpenAdManager
+    private lateinit var appOpenAdManager: AppOpenAdManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        appOpenAdManager = AppOpenAdManager(this)
+        MobileAds.initialize(this) { appOpenAdManager.loadAd() }
         setContent {
             MaterialTheme(colorScheme = darkColorScheme(
                 primary = Color(0xFF35D7F2),
@@ -38,6 +43,11 @@ class MainActivity : ComponentActivity() {
                 )
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (::appOpenAdManager.isInitialized) appOpenAdManager.showAdIfAvailable(this)
     }
 
     @Deprecated("Deprecated in Android")
