@@ -26,11 +26,16 @@ private const val SPEED_TEST_URL = "https://bandwithspeedtest.diy-craft-channel-
 class MainActivity : ComponentActivity() {
     private var speedTestWebView: WebView? = null
     private lateinit var appOpenAdManager: AppOpenAdManager
+    private var mobileAdsInitialized = false
+    private var hasGoneToBackground = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         appOpenAdManager = AppOpenAdManager(this)
-        MobileAds.initialize(this) { appOpenAdManager.loadAd() }
+        MobileAds.initialize(this) {
+            mobileAdsInitialized = true
+            appOpenAdManager.loadAd()
+        }
         setContent {
             MaterialTheme(colorScheme = darkColorScheme(
                 primary = Color(0xFF35D7F2),
@@ -46,7 +51,14 @@ class MainActivity : ComponentActivity() {
 
     override fun onStart() {
         super.onStart()
-        if (::appOpenAdManager.isInitialized) appOpenAdManager.showAdIfAvailable(this)
+        if (hasGoneToBackground && mobileAdsInitialized) {
+            appOpenAdManager.showAdIfAvailable(this)
+        }
+    }
+
+    override fun onStop() {
+        hasGoneToBackground = true
+        super.onStop()
     }
 
     @Deprecated("Deprecated in Android")
