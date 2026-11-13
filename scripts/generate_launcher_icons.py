@@ -36,4 +36,6 @@ for density, size in adaptive_sizes.items():
     folder.mkdir(parents=True, exist_ok=True)
     render(size, safe_zone=True).save(folder / "ic_launcher_foreground.png", optimize=True)
 
+# Adaptive foreground resources are generated from the same Speedtest.png source.
+
 print("Launcher icons generated successfully from Speedtest.png.")
