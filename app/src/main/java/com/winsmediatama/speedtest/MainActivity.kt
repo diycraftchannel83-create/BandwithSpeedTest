@@ -2,11 +2,12 @@ package com.winsmediatama.speedtest
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import com.google.android.gms.ads.MobileAds
+import android.webkit.JavascriptInterface
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import com.google.android.gms.ads.MobileAds
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -26,15 +27,18 @@ private const val SPEED_TEST_URL = "https://bandwithspeedtest.diy-craft-channel-
 class MainActivity : ComponentActivity() {
     private var speedTestWebView: WebView? = null
     private lateinit var appOpenAdManager: AppOpenAdManager
+    private lateinit var interstitialAdManager: InterstitialAdManager
     private var mobileAdsInitialized = false
     private var hasGoneToBackground = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         appOpenAdManager = AppOpenAdManager(this)
+        interstitialAdManager = InterstitialAdManager(this)
         MobileAds.initialize(this) {
             mobileAdsInitialized = true
             appOpenAdManager.loadAd()
+            interstitialAdManager.loadAd()
         }
         setContent {
             MaterialTheme(colorScheme = darkColorScheme(
@@ -43,9 +47,31 @@ class MainActivity : ComponentActivity() {
                 surface = Color(0xFF12243A)
             )) {
                 SpeedTestWebScreen(
-                    onWebViewCreated = { speedTestWebView = it }
+                    onWebViewCreated = { speedTestWebView = it },
+                    onRequestInterstitial = { showInterstitialThenStartTest() }
                 )
             }
+        }
+    }
+
+    private fun showInterstitialThenStartTest() {
+        // If an ad is not ready, never block the speed test.
+        if (!mobileAdsInitialized || !interstitialAdManager.isAdAvailable()) {
+            interstitialAdManager.loadAd()
+            startSpeedTestInWebView()
+            return
+        }
+        interstitialAdManager.showAd(this) {
+            startSpeedTestInWebView()
+        }
+    }
+
+    private fun startSpeedTestInWebView() {
+        runOnUiThread {
+            speedTestWebView?.evaluateJavascript(
+                "window.startSpeedTestFromAndroid && window.startSpeedTestFromAndroid();",
+                null
+            )
         }
     }
 
@@ -69,6 +95,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onDestroy() {
         speedTestWebView?.apply {
+            removeJavascriptInterface("AndroidAds")
             stopLoading()
             destroy()
         }
@@ -77,9 +104,21 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+private class AndroidAdsBridge(
+    private val onRequestInterstitial: () -> Unit
+) {
+    @JavascriptInterface
+    fun requestInterstitial() {
+        onRequestInterstitial()
+    }
+}
+
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
-private fun SpeedTestWebScreen(onWebViewCreated: (WebView) -> Unit) {
+private fun SpeedTestWebScreen(
+    onWebViewCreated: (WebView) -> Unit,
+    onRequestInterstitial: () -> Unit
+) {
     var loading by remember { mutableStateOf(true) }
 
     Box(
@@ -96,6 +135,7 @@ private fun SpeedTestWebScreen(onWebViewCreated: (WebView) -> Unit) {
                     settings.allowFileAccess = false
                     settings.allowContentAccess = false
                     settings.mixedContentMode = android.webkit.WebSettings.MIXED_CONTENT_NEVER_ALLOW
+                    addJavascriptInterface(AndroidAdsBridge(onRequestInterstitial), "AndroidAds")
                     webChromeClient = WebChromeClient()
                     webViewClient = object : WebViewClient() {
                         override fun shouldOverrideUrlLoading(
