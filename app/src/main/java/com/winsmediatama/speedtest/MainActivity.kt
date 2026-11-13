@@ -1,7 +1,7 @@
 package com.winsmediatama.speedtest
 
 import android.annotation.SuppressLint
-import android.os.Bundle
+import android.os.Bundle\nimport com.google.android.gms.ads.MobileAds
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
@@ -23,7 +23,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 private const val SPEED_TEST_URL = "https://bandwithspeedtest.diy-craft-channel-83.workers.dev/"
 
 class MainActivity : ComponentActivity() {
-    private var speedTestWebView: WebView? = null
+    private var speedTestWebView: WebView? = null\n    private lateinit var appOpenAdManager: AppOpenAdManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
