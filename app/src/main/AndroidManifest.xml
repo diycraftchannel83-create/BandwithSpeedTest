@@ -5,7 +5,10 @@
         android:allowBackup="false"
         android:label="Bandwidth Speed Test"
         android:theme="@android:style/Theme.Material.Light.NoActionBar"
-        android:usesCleartextTraffic="false">\n        <meta-data\n            android:name="com.google.android.gms.ads.APPLICATION_ID"\n            android:value="ca-app-pub-1254774552944426~4202353823" />
+        android:usesCleartextTraffic="false">
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-1254774552944426~4202353823" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
