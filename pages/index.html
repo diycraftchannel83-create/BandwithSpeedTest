@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#081426">
+<title>Bandwidth Speed Test — Wins Mediatama</title>
+<style>
+:root{color-scheme:dark;--bg:#081426;--panel:#12243a;--cyan:#35d7f2;--muted:#9cb0c7}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% 10%,#173451,var(--bg) 55%);color:#fff;font:16px system-ui,sans-serif;min-height:100vh}
+main{max-width:760px;margin:auto;padding:28px 18px 48px;text-align:center}.brand{color:var(--cyan);font-weight:800;letter-spacing:2px;font-size:12px}
+h1{font-size:clamp(25px,5vw,38px);margin:8px 0}.sub{color:var(--muted);font-size:14px}
+.gauge{width:min(70vw,270px);height:min(70vw,270px);border:10px solid #1b3a55;border-top-color:var(--cyan);border-radius:50%;margin:30px auto 20px;display:grid;place-content:center;box-shadow:0 0 35px #35d7f222}
+#state{color:var(--cyan);font-weight:800;font-size:13px}#speed{font-size:58px;font-weight:300;line-height:1.2}small{color:var(--muted)}
+.metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.metric{background:var(--panel);border:1px solid #24425d;border-radius:16px;padding:18px}
+.metric b{display:block;color:var(--muted);font-size:11px;letter-spacing:1px}.metric strong{display:block;font-size:26px;margin-top:8px}
+button{border:0;border-radius:999px;background:var(--cyan);color:#041321;font-weight:900;font-size:16px;padding:15px 34px;margin:24px 0;cursor:pointer}
+button:disabled{opacity:.5}.notice{font-size:12px;color:var(--muted);line-height:1.6;max-width:620px;margin:12px auto}
+footer{margin-top:28px;font-size:12px;color:var(--muted)}a{color:var(--cyan)}
+@media(max-width:420px){.metric strong{font-size:22px}}
+</style>
+</head>
+<body><main>
+<div class="brand">WINS MEDIATAMA</div><h1>Bandwidth Speed Test</h1><p class="sub">Ukur kualitas koneksi internet Anda</p>
+<div class="gauge"><div><div id="state">SIAP DIUJI</div><div id="speed">—</div><small>Mbps</small></div></div>
+<div class="metrics">
+<div class="metric"><b>DOWNLOAD</b><strong id="download">— Mbps</strong></div>
+<div class="metric"><b>UPLOAD</b><strong id="upload">— Mbps</strong></div>
+<div class="metric"><b>LATENCY</b><strong id="latency">— ms</strong></div>
+<div class="metric"><b>JITTER</b><strong id="jitter">— ms</strong></div>
+</div>
+<button id="start">MULAI PENGUJIAN</button>
+<p class="notice">Pengujian menggunakan engine open-source Cloudflare dan jaringan edge Cloudflare. Pengukuran dapat menggunakan hingga 200 MB data. Pastikan Anda menyetujui penggunaan data sebelum memulai. Hasil menunjukkan koneksi ke jaringan Cloudflare, bukan jaminan kecepatan ke semua tujuan internet.</p>
+<p id="error" class="notice" role="status"></p>
+<footer>Wins Mediatama · <a href="privacy.html">Kebijakan Privasi</a> · <a href="https://github.com/diycraftchannel83-create/BandwithSpeedTest">Source Code</a></footer>
+</main>
+<script type="module">
+import SpeedTest from 'https://cdn.jsdelivr.net/npm/@cloudflare/speedtest/+esm';
+const $=id=>document.getElementById(id);let test;
+$('start').addEventListener('click',()=>{
+ if(!window.confirm('Pengujian dapat menggunakan hingga 200 MB kuota internet. Lanjutkan?'))return;
+ $('start').disabled=true;$('error').textContent='';$('state').textContent='MENGUJI…';
+ $('download').textContent='…';$('upload').textContent='…';$('latency').textContent='…';$('jitter').textContent='…';
+ try{
+  test=new SpeedTest({autoStart:false,measurements:[
+   {type:'latency',numPackets:20},
+   {type:'download',bytes:1e5,count:6},
+   {type:'download',bytes:1e6,count:5},
+   {type:'download',bytes:1e7,count:3},
+   {type:'upload',bytes:1e5,count:6},
+   {type:'upload',bytes:1e6,count:4},
+   {type:'upload',bytes:1e7,count:2}
+  ]});
+  test.onResultsChange=()=>{
+   const r=test.results;
+   const d=r.getDownloadBandwidth(),u=r.getUploadBandwidth();
+   if(d>0){$('download').textContent=(d/1e6).toFixed(2)+' Mbps';$('speed').textContent=(d/1e6).toFixed(1)}
+   if(u>0)$('upload').textContent=(u/1e6).toFixed(2)+' Mbps';
+   const p=r.getUnloadedLatency(),j=r.getUnloadedJitter();
+   if(Number.isFinite(p))$('latency').textContent=p.toFixed(1)+' ms';
+   if(Number.isFinite(j))$('jitter').textContent=j.toFixed(1)+' ms';
+  };
+  test.onError=(message)=>{$('error').textContent='Sebagian pengukuran gagal: '+message};
+  test.onFinish=(r)=>{
+   const d=r.getDownloadBandwidth(),u=r.getUploadBandwidth();
+   $('download').textContent=d>0?(d/1e6).toFixed(2)+' Mbps':'Tidak tersedia';
+   $('upload').textContent=u>0?(u/1e6).toFixed(2)+' Mbps':'Tidak tersedia';
+   const p=r.getUnloadedLatency(),j=r.getUnloadedJitter();
+   $('latency').textContent=Number.isFinite(p)?p.toFixed(1)+' ms':'— ms';
+   $('jitter').textContent=Number.isFinite(j)?j.toFixed(1)+' ms':'— ms';
+   $('speed').textContent=d>0?(d/1e6).toFixed(1):'—';
+   $('state').textContent='SELESAI';$('start').disabled=false;$('start').textContent='UJI LAGI';
+  };
+  test.play();
+ }catch(e){$('error').textContent='Engine gagal dijalankan: '+e.message;$('state').textContent='GAGAL';$('start').disabled=false}
+});
+</script></body></html>
