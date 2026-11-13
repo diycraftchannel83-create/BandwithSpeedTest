@@ -1,8 +1,12 @@
 package com.winsmediatama.speedtest
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.widget.EditText
 import android.os.Bundle
 import android.webkit.JavascriptInterface
+import android.webkit.JsPromptResult
+import android.webkit.JsResult
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
@@ -140,7 +144,55 @@ private fun SpeedTestWebScreen(
                     settings.allowContentAccess = false
                     settings.mixedContentMode = android.webkit.WebSettings.MIXED_CONTENT_NEVER_ALLOW
                     addJavascriptInterface(AndroidAdsBridge(onRequestInterstitial), "AndroidAds")
-                    webChromeClient = WebChromeClient()
+                    webChromeClient = object : WebChromeClient() {
+                        // Show only the page-provided message; do not expose the origin URL.
+                        override fun onJsAlert(
+                            view: WebView,
+                            url: String,
+                            message: String,
+                            result: JsResult
+                        ): Boolean {
+                            AlertDialog.Builder(view.context)
+                                .setMessage(message)
+                                .setPositiveButton("OK") { _, _ -> result.confirm() }
+                                .setOnCancelListener { result.cancel() }
+                                .show()
+                            return true
+                        }
+
+                        override fun onJsConfirm(
+                            view: WebView,
+                            url: String,
+                            message: String,
+                            result: JsResult
+                        ): Boolean {
+                            AlertDialog.Builder(view.context)
+                                .setMessage(message)
+                                .setNegativeButton("Batal") { _, _ -> result.cancel() }
+                                .setPositiveButton("OK") { _, _ -> result.confirm() }
+                                .setOnCancelListener { result.cancel() }
+                                .show()
+                            return true
+                        }
+
+                        override fun onJsPrompt(
+                            view: WebView,
+                            url: String,
+                            message: String,
+                            defaultValue: String,
+                            result: JsPromptResult
+                        ): Boolean {
+                            val input = EditText(view.context).apply { setText(defaultValue) }
+                            AlertDialog.Builder(view.context)
+                                .setMessage(message)
+                                .setView(input)
+                                .setNegativeButton("Batal") { _, _ -> result.cancel() }
+                                .setPositiveButton("OK") { _, _ -> result.confirm(input.text.toString()) }
+                                .setOnCancelListener { result.cancel() }
+                                .show()
+                            return true
+                        }
+                    }
                     webViewClient = object : WebViewClient() {
                         override fun shouldOverrideUrlLoading(
                             view: WebView,
