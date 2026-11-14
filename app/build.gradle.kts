@@ -6,12 +6,12 @@ plugins {
 
 android {
     namespace = "com.winsmediatama.speedtest"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.winsmediatama.speedtest"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 36
         versionCode = System.getenv("VERSION_CODE")?.toIntOrNull() ?: 1
         versionName = System.getenv("VERSION_NAME") ?: "1.0.0"
     }
