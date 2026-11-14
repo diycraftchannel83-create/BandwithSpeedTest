@@ -56,6 +56,8 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.material:material-icons-extended")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
+    // Override outdated transitive Fragment versions flagged by Google Play.
+    implementation("androidx.fragment:fragment:1.9.1")
     implementation("com.google.android.gms:play-services-ads:24.7.0")
     debugImplementation("androidx.compose.ui:ui-tooling")
 }
