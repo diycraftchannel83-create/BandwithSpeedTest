@@ -80,7 +80,7 @@ body[dir=rtl] .section{text-align:right}body[dir=rtl] .language-control{flex-dir
   <path class="gauge-active" id="gaugeArc" d="M35 180 A125 125 0 0 1 285 180"/>
  </svg>
  <div class="needle" id="needle"></div><div class="needle-hub"></div>
- <div class="gauge-readout"><div id="gaugeMode" data-i18n="speedTest">SPEED TEST</div><div id="speed">—</div><small>Mbps</small><div id="state" data-i18n="ready">SIAP DIUJI</div></div>
+ <div class="gauge-readout"><div id="gaugeMode" data-i18n="speedTest">SPEED TEST</div><div id="speed">—</div><small>Mbps</small><div id="state" data-state="ready" data-i18n="ready">SIAP DIUJI</div></div>
  <span class="gauge-scale gauge-zero">0</span><span class="gauge-scale gauge-max">500 Mbps</span>
 </div>
 </div>
@@ -168,13 +168,14 @@ function updateNetwork(){
  else $('network').textContent=t('online')+' · '+t('unsupported');
 }
 async function loadIpInfo(){
+ $('ip').textContent=t('loading');$('isp').textContent=t('loading');$('location').textContent=t('loading');
  try{
   const response=await fetch('https://ipwho.is/',{cache:'no-store'});
   if(!response.ok)throw new Error('HTTP '+response.status);
   const data=await response.json();if(data.success===false)throw new Error(data.message||'Lookup gagal');
-  $('ip').textContent=data.ip||'Tidak tersedia';
-  $('isp').textContent=data.connection?.isp||data.connection?.org||'Tidak tersedia';
-  $('location').textContent=[data.city,data.region,data.country].filter(Boolean).join(', ')||'Tidak tersedia';
+  $('ip').textContent=data.ip||t('notAvailable');
+  $('isp').textContent=data.connection?.isp||data.connection?.org||t('notAvailable');
+  $('location').textContent=[data.city,data.region,data.country].filter(Boolean).join(', ')||t('notAvailable');
  }catch(e){$('ip').textContent=t('notAvailable');$('isp').textContent=t('notAvailable');$('location').textContent=t('lookupFailed');}
 }
 function saveResult(result){
