@@ -11,7 +11,7 @@ html{background:var(--bg);scroll-behavior:smooth}
 body{margin:0;min-height:100vh;color:#eafaff;background:radial-gradient(ellipse at 50% 22%,#07314a 0,#031725 34%,#020911 72%);font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif;overflow-x:hidden}
 body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;background-image:linear-gradient(#00c8ff19 1px,transparent 1px),linear-gradient(90deg,#00c8ff19 1px,transparent 1px);background-size:34px 34px;mask-image:linear-gradient(to bottom,black,transparent 90%);z-index:0}
 main{position:relative;z-index:1;max-width:980px;margin:auto;padding:24px 16px calc(38px + env(safe-area-inset-bottom));text-align:center}
-.brand{color:var(--cyan);font-size:13px;font-weight:900;letter-spacing:4px;text-shadow:var(--glow);margin:2px 0 6px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:7px}.language-control{display:flex;align-items:center;gap:7px;color:var(--muted);font-size:10px;font-weight:900;letter-spacing:1px}.language-control select{max-width:150px;padding:8px 10px;border:1px solid #087f9c;border-radius:5px;color:#eaffff;background:#061d2b;font:700 12px system-ui;box-shadow:0 0 10px #00dfff22}.brand{color:var(--cyan);font-size:13px;font-weight:900;letter-spacing:4px;text-shadow:var(--glow);margin:2px 0 6px}
 h1{font-size:clamp(27px,6vw,48px);line-height:1.02;letter-spacing:1px;font-style:italic;font-weight:1000;text-transform:uppercase;margin:0;color:#f4fdff;text-shadow:0 0 10px #fff8,0 0 24px #00cfff77}
 .sub{color:#47edff;font-size:15px;margin:10px 0 0}
 .hero-frame{position:relative;margin:22px 0 16px;padding:14px 8px 8px;border-top:1px solid #087f9c;border-bottom:1px solid #087f9c;background:linear-gradient(180deg,#05233888,#03111c55);clip-path:polygon(5% 0,95% 0,100% 10%,100% 90%,95% 100%,5% 100%,0 90%,0 10%);filter:drop-shadow(0 0 14px #00d9ff44)}
@@ -65,14 +65,14 @@ button{font-family:inherit;cursor:pointer}
 footer{margin:34px auto 0;padding:14px 8px;border-top:1px solid #08758d;border-bottom:1px solid #08758d;color:#91c5d4;font-size:11px;line-height:1.8;text-shadow:0 0 8px #00dfff44}
 a{color:var(--cyan)}
 @media(min-width:700px){main{padding-top:32px}.hero-frame{margin-top:28px}.metrics{gap:16px}.info-grid{gap:14px}.metric{padding:22px}}
-@media(max-width:390px){main{padding-left:11px;padding-right:11px}.metric{padding:14px 6px}.info{padding:12px 10px}.history-item{grid-template-columns:1fr;gap:5px}.history-item .history-stats{white-space:normal}.chevrons{font-size:22px}}
+@media(max-width:390px){.topbar{align-items:flex-start;flex-direction:column}.language-control select{max-width:100%}main{padding-left:11px;padding-right:11px}.metric{padding:14px 6px}.info{padding:12px 10px}.history-item{grid-template-columns:1fr;gap:5px}.history-item .history-stats{white-space:normal}.chevrons{font-size:22px}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
 </style>
 </head>
 <body><main>
-<div class="brand">WINS MEDIATAMA</div>
+<div class="topbar"><div class="brand">WINS MEDIATAMA</div><label class="language-control"><span id="languageLabel">BAHASA</span><select id="languageSelect" aria-label="Language"><option value="id">🇮🇩 Indonesia</option><option value="en">🇬🇧 English</option><option value="zh">🇨🇳 中文</option><option value="ru">🇷🇺 Русский</option><option value="ms">🇲🇾 Bahasa Melayu</option><option value="ar">🇸🇦 العربية</option></select></label></div>
 <h1>Bandwidth<br>Speed Test</h1>
-<p class="sub">Ukur kualitas koneksi internet Anda</p>
+<p class="sub" data-i18n="subtitle">Ukur kualitas koneksi internet Anda</p>
 <div class="hero-frame">
 <div class="gauge" role="img" aria-label="Indikator kecepatan berbentuk speedometer">
  <svg viewBox="0 0 320 210" aria-hidden="true">
@@ -80,38 +80,61 @@ a{color:var(--cyan)}
   <path class="gauge-active" id="gaugeArc" d="M35 180 A125 125 0 0 1 285 180"/>
  </svg>
  <div class="needle" id="needle"></div><div class="needle-hub"></div>
- <div class="gauge-readout"><div id="gaugeMode">SPEED TEST</div><div id="speed">—</div><small>Mbps</small><div id="state">SIAP DIUJI</div></div>
+ <div class="gauge-readout"><div id="gaugeMode" data-i18n="speedTest">SPEED TEST</div><div id="speed">—</div><small>Mbps</small><div id="state" data-i18n="ready">SIAP DIUJI</div></div>
  <span class="gauge-scale gauge-zero">0</span><span class="gauge-scale gauge-max">500 Mbps</span>
 </div>
 </div>
 <div class="metrics">
-<div class="metric"><b>↓ DOWNLOAD</b><strong id="download">— Mbps</strong></div>
-<div class="metric"><b>↑ UPLOAD</b><strong id="upload">— Mbps</strong></div>
-<div class="metric"><b>⌁ LATENCY</b><strong id="latency">— ms</strong></div>
-<div class="metric"><b>≈ JITTER</b><strong id="jitter">— ms</strong></div>
+<div class="metric"><b data-i18n="download">↓ DOWNLOAD</b><strong id="download">— Mbps</strong></div>
+<div class="metric"><b data-i18n="upload">↑ UPLOAD</b><strong id="upload">— Mbps</strong></div>
+<div class="metric"><b data-i18n="latency">⌁ LATENCY</b><strong id="latency">— ms</strong></div>
+<div class="metric"><b data-i18n="jitter">≈ JITTER</b><strong id="jitter">— ms</strong></div>
 </div>
-<div class="action-wrap"><span class="chevrons">»»</span><button id="start">↻ &nbsp; UJI LAGI</button><span class="chevrons">««</span></div>
-<p class="notice">Pengujian dapat menggunakan hingga sekitar 200 MB data. Minta persetujuan sebelum memulai. Hasil adalah kualitas koneksi ke jaringan edge Cloudflare, bukan jaminan kecepatan ke semua tujuan internet.</p>
+<div class="action-wrap"><span class="chevrons">»»</span><button id="start" data-i18n="start">↻ &nbsp; UJI LAGI</button><span class="chevrons">««</span></div>
+<p class="notice" data-i18n="notice">Pengujian dapat menggunakan hingga sekitar 200 MB data. Minta persetujuan sebelum memulai. Hasil adalah kualitas koneksi ke jaringan edge Cloudflare, bukan jaminan kecepatan ke semua tujuan internet.</p>
 <p id="error" class="notice" role="status"></p>
 <section class="section">
-<h2>▥ &nbsp; INFORMASI JARINGAN</h2>
+<h2 data-i18n="networkInfo">▥ &nbsp; INFORMASI JARINGAN</h2>
 <div class="info-grid">
-<div class="info"><b>◎ IP PUBLIK</b><strong id="ip">Memuat…</strong></div>
-<div class="info"><b>⌁ ISP / PROVIDER</b><strong id="isp">Memuat…</strong></div>
-<div class="info"><b>⌖ PERKIRAAN LOKASI IP</b><strong id="location">Memuat…</strong></div>
-<div class="info"><b>◉ JENIS KONEKSI</b><strong id="network">Mendeteksi…</strong></div>
+<div class="info"><b data-i18n="publicIp">◎ IP PUBLIK</b><strong id="ip">Memuat…</strong></div>
+<div class="info"><b data-i18n="provider">⌁ ISP / PROVIDER</b><strong id="isp">Memuat…</strong></div>
+<div class="info"><b data-i18n="ipLocation">⌖ PERKIRAAN LOKASI IP</b><strong id="location">Memuat…</strong></div>
+<div class="info"><b data-i18n="connectionType">◉ JENIS KONEKSI</b><strong id="network">Mendeteksi…</strong></div>
 </div>
-<p class="info-note">Informasi IP dikueri melalui layanan pihak ketiga IPWho.is, sehingga alamat IP Anda diterima oleh layanan tersebut. Lokasi merupakan perkiraan berdasarkan IP, bukan GPS. Nama ISP bisa berbeda dari operator SIM.</p>
+<p class="info-note" data-i18n="ipNote">Informasi IP dikueri melalui layanan pihak ketiga IPWho.is, sehingga alamat IP Anda diterima oleh layanan tersebut. Lokasi merupakan perkiraan berdasarkan IP, bukan GPS. Nama ISP bisa berbeda dari operator SIM.</p>
 </section>
 <section class="section">
-<div class="section-head"><h2>◴ &nbsp; RIWAYAT PENGUJIAN</h2><button class="secondary" id="clearHistory" type="button">▣ Hapus Riwayat</button></div>
-<div id="history" class="history"><p class="empty">Belum ada riwayat pengujian.</p></div>
+<div class="section-head"><h2 data-i18n="history">◴ &nbsp; RIWAYAT PENGUJIAN</h2><button class="secondary" id="clearHistory" type="button" data-i18n="clearHistory">▣ Hapus Riwayat</button></div>
+<div id="history" class="history"><p class="empty" data-i18n="emptyHistory">Belum ada riwayat pengujian.</p></div>
 </section>
-<footer>WINS MEDIATAMA &nbsp;·&nbsp; Pengujian oleh Cloudflare &nbsp;·&nbsp; <a href="privacy.html">Kebijakan Privasi</a></footer>
+<footer>WINS MEDIATAMA &nbsp;·&nbsp; <span data-i18n="poweredBy">Pengujian oleh Cloudflare</span> &nbsp;·&nbsp; <a href="privacy.html" data-i18n="privacy">Kebijakan Privasi</a></footer>
 </main>
 <script type="module">
 import SpeedTest from 'https://cdn.jsdelivr.net/npm/@cloudflare/speedtest/+esm';
 const $=id=>document.getElementById(id);
+const LANGS={
+id:{language:"BAHASA",subtitle:"Ukur kualitas koneksi internet Anda",speedTest:"TES KECEPATAN",ready:"SIAP DIUJI",download:"↓ UNDUH",upload:"↑ UNGGAH",latency:"⌁ LATENSI",jitter:"≈ JITTER",start:"↻  MULAI TES",notice:"Pengujian dapat menggunakan hingga sekitar 200 MB data. Minta persetujuan sebelum memulai. Hasil menunjukkan kualitas koneksi ke jaringan edge Cloudflare, bukan jaminan kecepatan ke semua tujuan internet.",networkInfo:"▥  INFORMASI JARINGAN",publicIp:"◎ IP PUBLIK",provider:"⌁ ISP / PENYEDIA",ipLocation:"⌖ PERKIRAAN LOKASI IP",connectionType:"◉ JENIS KONEKSI",ipNote:"Informasi IP diperoleh melalui layanan pihak ketiga IPWho.is, sehingga alamat IP Anda diterima oleh layanan tersebut. Lokasi diperkirakan berdasarkan IP, bukan GPS. Nama ISP bisa berbeda dari operator SIM.",history:"◴  RIWAYAT TES",clearHistory:"▣ HAPUS RIWAYAT",emptyHistory:"Belum ada riwayat pengujian.",poweredBy:"Tes didukung Cloudflare",privacy:"Kebijakan Privasi",loading:"Memuat…",detecting:"Mendeteksi…",offline:"Tidak terhubung",online:"Online",unsupported:"detail tidak didukung browser",dataSaver:"Hemat data",approx:"perkiraan",lookupFailed:"Gagal memuat",notAvailable:"Tidak tersedia",downloadTesting:"MENGUJI UNDUH…",uploadTesting:"MENGUJI UNGGAH…",done:"SELESAI",failed:"GAGAL",partialError:"Sebagian pengukuran gagal: ",engineError:"Mesin tes gagal dijalankan: ",historySavedError:"Tes selesai, tetapi riwayat gagal disimpan di perangkat.",clearConfirm:"Hapus semua riwayat tes yang tersimpan di perangkat ini?",retry:"TES LAGI",ping:"Ping",clearOk:"HAPUS",cancel:"BATAL",locale:"id-ID"},
+en:{language:"LANGUAGE",subtitle:"Measure your internet connection quality",speedTest:"SPEED TEST",ready:"READY TO TEST",download:"↓ DOWNLOAD",upload:"↑ UPLOAD",latency:"⌁ LATENCY",jitter:"≈ JITTER",start:"↻  START TEST",notice:"The test may use up to approximately 200 MB of data. Ask for consent before starting. Results reflect connection quality to Cloudflare's edge network and do not guarantee speeds to every internet destination.",networkInfo:"▥  NETWORK INFORMATION",publicIp:"◎ PUBLIC IP",provider:"⌁ ISP / PROVIDER",ipLocation:"⌖ ESTIMATED IP LOCATION",connectionType:"◉ CONNECTION TYPE",ipNote:"IP information is queried through the third-party service IPWho.is, which receives your IP address. Location is estimated from your IP, not GPS. The ISP name may differ from your SIM operator.",history:"◴  TEST HISTORY",clearHistory:"▣ CLEAR HISTORY",emptyHistory:"No test history yet.",poweredBy:"Testing powered by Cloudflare",privacy:"Privacy Policy",loading:"Loading…",detecting:"Detecting…",offline:"Offline",online:"Online",unsupported:"details not supported by browser",dataSaver:"Data saver",approx:"estimated",lookupFailed:"Lookup failed",notAvailable:"Not available",downloadTesting:"TESTING DOWNLOAD…",uploadTesting:"TESTING UPLOAD…",done:"COMPLETED",failed:"FAILED",partialError:"Some measurements failed: ",engineError:"Test engine failed to start: ",historySavedError:"Test completed, but the result could not be saved on this device.",clearConfirm:"Delete all test history stored on this device?",retry:"TEST AGAIN",ping:"Ping",clearOk:"CLEAR",cancel:"CANCEL",locale:"en-US"},
+zh:{language:"语言",subtitle:"测量您的互联网连接质量",speedTest:"网速测试",ready:"准备测试",download:"↓ 下载速度",upload:"↑ 上传速度",latency:"⌁ 延迟",jitter:"≈ 抖动",start:"↻ 开始测试",notice:"测试最多可能使用约 200 MB 数据。开始前请征得用户同意。结果反映的是到 Cloudflare 边缘网络的连接质量，并不保证到所有互联网目的地的速度。",networkInfo:"▥ 网络信息",publicIp:"◎ 公网 IP",provider:"⌁ 互联网服务提供商",ipLocation:"⌖ IP 估算位置",connectionType:"◉ 连接类型",ipNote:"IP 信息通过第三方服务 IPWho.is 查询，该服务会接收您的 IP 地址。位置根据 IP 估算，并非 GPS 定位。ISP 名称可能与 SIM 卡运营商不同。",history:"◴ 测试记录",clearHistory:"▣ 清除记录",emptyHistory:"暂无测试记录。",poweredBy:"由 Cloudflare 提供测试支持",privacy:"隐私政策",loading:"加载中…",detecting:"正在检测…",offline:"离线",online:"在线",unsupported:"浏览器不支持详细信息",dataSaver:"流量节省模式",approx:"估算",lookupFailed:"查询失败",notAvailable:"不可用",downloadTesting:"正在测试下载…",uploadTesting:"正在测试上传…",done:"已完成",failed:"失败",partialError:"部分测量失败：",engineError:"测试引擎启动失败：",historySavedError:"测试已完成，但无法在此设备上保存结果。",clearConfirm:"删除此设备上保存的所有测试记录吗？",retry:"重新测试",ping:"延迟",clearOk:"清除",cancel:"取消",locale:"zh-CN"},
+ru:{language:"ЯЗЫК",subtitle:"Измерьте качество интернет-соединения",speedTest:"ТЕСТ СКОРОСТИ",ready:"ГОТОВО К ТЕСТУ",download:"↓ ЗАГРУЗКА",upload:"↑ ОТПРАВКА",latency:"⌁ ЗАДЕРЖКА",jitter:"≈ ДЖИТТЕР",start:"↻ НАЧАТЬ ТЕСТ",notice:"Тест может использовать до 200 МБ данных. Перед запуском запросите согласие пользователя. Результаты показывают качество соединения с сетью Cloudflare Edge и не гарантируют такую скорость для всех интернет-ресурсов.",networkInfo:"▥ СЕТЕВАЯ ИНФОРМАЦИЯ",publicIp:"◎ ПУБЛИЧНЫЙ IP",provider:"⌁ ПРОВАЙДЕР",ipLocation:"⌖ ПРИМЕРНОЕ МЕСТОПОЛОЖЕНИЕ IP",connectionType:"◉ ТИП СОЕДИНЕНИЯ",ipNote:"IP-информация запрашивается через сторонний сервис IPWho.is, который получает ваш IP-адрес. Местоположение определяется приблизительно по IP, а не по GPS. Название провайдера может отличаться от оператора SIM-карты.",history:"◴ ИСТОРИЯ ТЕСТОВ",clearHistory:"▣ ОЧИСТИТЬ ИСТОРИЮ",emptyHistory:"История тестов пока пуста.",poweredBy:"Тестирование на базе Cloudflare",privacy:"Политика конфиденциальности",loading:"Загрузка…",detecting:"Определение…",offline:"Нет подключения",online:"В сети",unsupported:"браузер не поддерживает подробные данные",dataSaver:"Экономия трафика",approx:"примерно",lookupFailed:"Ошибка запроса",notAvailable:"Недоступно",downloadTesting:"ТЕСТ ЗАГРУЗКИ…",uploadTesting:"ТЕСТ ОТПРАВКИ…",done:"ЗАВЕРШЕНО",failed:"ОШИБКА",partialError:"Некоторые измерения не выполнены: ",engineError:"Не удалось запустить тест: ",historySavedError:"Тест завершён, но результат не удалось сохранить на устройстве.",clearConfirm:"Удалить всю историю тестов на этом устройстве?",retry:"ПОВТОРИТЬ ТЕСТ",ping:"Пинг",clearOk:"ОЧИСТИТЬ",cancel:"ОТМЕНА",locale:"ru-RU"},
+ms:{language:"BAHASA",subtitle:"Ukur kualiti sambungan internet anda",speedTest:"UJIAN KELAJUAN",ready:"SEDIA UNTUK DIUJI",download:"↓ MUAT TURUN",upload:"↑ MUAT NAIK",latency:"⌁ KELEWATAN",jitter:"≈ JITTER",start:"↻ MULA UJIAN",notice:"Ujian mungkin menggunakan sehingga kira-kira 200 MB data. Dapatkan persetujuan sebelum bermula. Keputusan menunjukkan kualiti sambungan ke rangkaian edge Cloudflare dan bukan jaminan kelajuan ke semua destinasi internet.",networkInfo:"▥ MAKLUMAT RANGKAIAN",publicIp:"◎ IP AWAM",provider:"⌁ ISP / PENYEDIA",ipLocation:"⌖ ANGGARAN LOKASI IP",connectionType:"◉ JENIS SAMBUNGAN",ipNote:"Maklumat IP diperoleh melalui perkhidmatan pihak ketiga IPWho.is yang menerima alamat IP anda. Lokasi dianggarkan berdasarkan IP, bukan GPS. Nama ISP mungkin berbeza daripada operator SIM.",history:"◴ SEJARAH UJIAN",clearHistory:"▣ PADAM SEJARAH",emptyHistory:"Belum ada sejarah ujian.",poweredBy:"Ujian dikuasakan oleh Cloudflare",privacy:"Dasar Privasi",loading:"Memuatkan…",detecting:"Mengesan…",offline:"Luar talian",online:"Dalam talian",unsupported:"butiran tidak disokong oleh pelayar",dataSaver:"Penjimatan data",approx:"anggaran",lookupFailed:"Carian gagal",notAvailable:"Tidak tersedia",downloadTesting:"MENGUJI MUAT TURUN…",uploadTesting:"MENGUJI MUAT NAIK…",done:"SELESAI",failed:"GAGAL",partialError:"Sesetengah ukuran gagal: ",engineError:"Enjin ujian gagal dimulakan: ",historySavedError:"Ujian selesai, tetapi keputusan gagal disimpan pada peranti ini.",clearConfirm:"Padam semua sejarah ujian yang disimpan pada peranti ini?",retry:"UJI LAGI",ping:"Ping",clearOk:"PADAM",cancel:"BATAL",locale:"ms-MY"},
+ar:{language:"اللغة",subtitle:"قياس جودة اتصالك بالإنترنت",speedTest:"اختبار السرعة",ready:"جاهز للاختبار",download:"↓ سرعة التنزيل",upload:"↑ سرعة الرفع",latency:"⌁ زمن الاستجابة",jitter:"≈ التذبذب",start:"↻ بدء الاختبار",notice:"قد يستهلك الاختبار ما يصل إلى نحو 200 ميغابايت من البيانات. اطلب الموافقة قبل البدء. تعرض النتائج جودة الاتصال بشبكة Cloudflare الطرفية، ولا تضمن السرعة إلى جميع وجهات الإنترنت.",networkInfo:"▥ معلومات الشبكة",publicIp:"◎ عنوان IP العام",provider:"⌁ مزود خدمة الإنترنت",ipLocation:"⌖ الموقع التقريبي لعنوان IP",connectionType:"◉ نوع الاتصال",ipNote:"يتم الاستعلام عن معلومات IP عبر خدمة خارجية IPWho.is، والتي تستقبل عنوان IP الخاص بك. يتم تقدير الموقع اعتماداً على IP وليس GPS. قد يختلف اسم مزود الخدمة عن مشغل SIM.",history:"◴ سجل الاختبارات",clearHistory:"▣ مسح السجل",emptyHistory:"لا يوجد سجل اختبارات بعد.",poweredBy:"الاختبار مقدم من Cloudflare",privacy:"سياسة الخصوصية",loading:"جارٍ التحميل…",detecting:"جارٍ الكشف…",offline:"غير متصل",online:"متصل",unsupported:"المتصفح لا يدعم التفاصيل",dataSaver:"توفير البيانات",approx:"تقديري",lookupFailed:"فشل الاستعلام",notAvailable:"غير متاح",downloadTesting:"اختبار التنزيل…",uploadTesting:"اختبار الرفع…",done:"اكتمل",failed:"فشل",partialError:"فشلت بعض القياسات: ",engineError:"تعذر بدء محرك الاختبار: ",historySavedError:"اكتمل الاختبار، ولكن تعذر حفظ النتيجة على هذا الجهاز.",clearConfirm:"هل تريد حذف سجل الاختبارات المحفوظ على هذا الجهاز؟",retry:"إعادة الاختبار",ping:"بينغ",clearOk:"مسح",cancel:"إلغاء",locale:"ar"}
+};
+let currentLang=localStorage.getItem('wins_speedtest_language')||'id';
+function t(key){return (LANGS[currentLang]||LANGS.id)[key]||LANGS.id[key]||key}
+function applyLanguage(lang){
+ currentLang=LANGS[lang]?lang:'id';localStorage.setItem('wins_speedtest_language',currentLang);
+ document.documentElement.lang=currentLang;document.documentElement.dir=currentLang==='ar'?'rtl':'ltr';
+ document.body.dir=currentLang==='ar'?'rtl':'ltr';
+ $('languageSelect').value=currentLang;$('languageLabel').textContent=t('language');
+ document.querySelectorAll('[data-i18n]').forEach(el=>{const key=el.dataset.i18n;if(LANGS[currentLang][key])el.textContent=LANGS[currentLang][key]});
+ if(!$('start').disabled)$('start').textContent=t('start');
+ if($('state').dataset.state==='ready')$('state').textContent=t('ready');
+ if($('state').dataset.state==='done')$('state').textContent=t('done');
+ if($('state').dataset.state==='failed')$('state').textContent=t('failed');
+ renderHistory();
+}
+
 const HISTORY_KEY='wins_bandwidth_test_history_v1';
 let test;
 const GAUGE_MAX_MBPS=500;
@@ -130,19 +153,19 @@ function updateGauge(mode,mbps){
 function readHistory(){try{return JSON.parse(localStorage.getItem(HISTORY_KEY)||'[]')}catch{return[]}}
 function renderHistory(){
  const items=readHistory();const root=$('history');root.replaceChildren();
- if(!items.length){root.innerHTML='<p class="notice">Belum ada riwayat pengujian.</p>';return}
+ if(!items.length){const p=document.createElement('p');p.className='empty';p.textContent=t('emptyHistory');root.append(p);return}
  items.slice(0,10).forEach(item=>{
   const row=document.createElement('div');row.className='history-item';
-  const left=document.createElement('div');const date=document.createElement('div');date.className='muted';date.textContent=new Date(item.at).toLocaleString('id-ID');
+  const left=document.createElement('div');const date=document.createElement('div');date.className='muted';date.textContent=new Date(item.at).toLocaleString(t('locale'));
   const label=document.createElement('strong');label.textContent='↓ '+item.download+' Mbps  ·  ↑ '+item.upload+' Mbps';
-  left.append(date,label);const right=document.createElement('div');right.className='muted';right.textContent='Ping '+item.latency+' ms · Jitter '+item.jitter+' ms';row.append(left,right);root.append(row);
+  left.append(date,label);const right=document.createElement('div');right.className='muted';right.textContent=t('ping')+' '+item.latency+' ms · '+t('jitter').replace('≈ ','')+' '+item.jitter+' ms';row.append(left,right);root.append(row);
  });
 }
 function updateNetwork(){
  const c=navigator.connection||navigator.mozConnection||navigator.webkitConnection;
- if(!navigator.onLine){$('network').textContent='Offline';return}
- if(c){const parts=[];if(c.effectiveType)parts.push(c.effectiveType.toUpperCase());if(c.downlink)parts.push(c.downlink+' Mbps perkiraan');if(c.saveData)parts.push('Hemat data');$('network').textContent=parts.join(' · ')||'Online'}
- else $('network').textContent='Online · detail tidak didukung browser';
+ if(!navigator.onLine){$('network').textContent=t('offline');return}
+ if(c){const parts=[];if(c.effectiveType)parts.push(c.effectiveType.toUpperCase());if(c.downlink)parts.push(c.downlink+' Mbps '+t('approx'));if(c.saveData)parts.push(t('dataSaver'));$('network').textContent=parts.join(' · ')||'Online'}
+ else $('network').textContent=t('online')+' · '+t('unsupported');
 }
 async function loadIpInfo(){
  try{
@@ -152,14 +175,14 @@ async function loadIpInfo(){
   $('ip').textContent=data.ip||'Tidak tersedia';
   $('isp').textContent=data.connection?.isp||data.connection?.org||'Tidak tersedia';
   $('location').textContent=[data.city,data.region,data.country].filter(Boolean).join(', ')||'Tidak tersedia';
- }catch(e){$('ip').textContent='Tidak tersedia';$('isp').textContent='Tidak tersedia';$('location').textContent='Lookup gagal';}
+ }catch(e){$('ip').textContent=t('notAvailable');$('isp').textContent=t('notAvailable');$('location').textContent=t('lookupFailed');}
 }
 function saveResult(result){
  const item={at:new Date().toISOString(),download:Number((result.getDownloadBandwidth()/1e6).toFixed(2)),upload:Number((result.getUploadBandwidth()/1e6).toFixed(2)),latency:Number(result.getUnloadedLatency().toFixed(1)),jitter:Number(result.getUnloadedJitter().toFixed(1))};
  const items=readHistory();items.unshift(item);localStorage.setItem(HISTORY_KEY,JSON.stringify(items.slice(0,30)));renderHistory();
 }
 window.startSpeedTestFromAndroid=()=>{
- $('start').disabled=true;$('error').textContent='';$('state').textContent='MENGUJI DOWNLOAD…';updateGauge('DOWNLOAD',0);
+ $('start').disabled=true;$('error').textContent='';$('state').dataset.state='running';$('state').textContent=t('downloadTesting');updateGauge('DOWNLOAD',0);
  for(const id of ['download','upload','latency','jitter'])$(id).textContent='…';
  try{
   test=new SpeedTest({autoStart:false,measurements:[
@@ -169,20 +192,20 @@ window.startSpeedTestFromAndroid=()=>{
   test.onResultsChange=()=>{
    const r=test.results,d=r.getDownloadBandwidth(),u=r.getUploadBandwidth(),p=r.getUnloadedLatency(),j=r.getUnloadedJitter();
    if(d>0)$('download').textContent=(d/1e6).toFixed(2)+' Mbps';
-   if(u>0){$('upload').textContent=(u/1e6).toFixed(2)+' Mbps';$('state').textContent='MENGUJI UPLOAD…';updateGauge('UPLOAD',u/1e6)}
-   else if(d>0){$('state').textContent='MENGUJI DOWNLOAD…';updateGauge('DOWNLOAD',d/1e6)}
+   if(u>0){$('upload').textContent=(u/1e6).toFixed(2)+' Mbps';$('state').textContent=t('uploadTesting');updateGauge('UPLOAD',u/1e6)}
+   else if(d>0){$('state').textContent=t('downloadTesting');updateGauge('DOWNLOAD',d/1e6)}
    if(Number.isFinite(p))$('latency').textContent=p.toFixed(1)+' ms';if(Number.isFinite(j))$('jitter').textContent=j.toFixed(1)+' ms';
   };
-  test.onError=message=>{$('error').textContent='Sebagian pengukuran gagal: '+message};
+  test.onError=message=>{$('error').textContent=t('partialError')+message};
   test.onFinish=r=>{
    const d=r.getDownloadBandwidth(),u=r.getUploadBandwidth(),p=r.getUnloadedLatency(),j=r.getUnloadedJitter();
    $('download').textContent=d>0?(d/1e6).toFixed(2)+' Mbps':'Tidak tersedia';$('upload').textContent=u>0?(u/1e6).toFixed(2)+' Mbps':'Tidak tersedia';
    $('latency').textContent=Number.isFinite(p)?p.toFixed(1)+' ms':'— ms';$('jitter').textContent=Number.isFinite(j)?j.toFixed(1)+' ms':'— ms';
-   updateGauge('UPLOAD',u/1e6);$('state').textContent='SELESAI';$('start').disabled=false;$('start').textContent='UJI LAGI';
-   try{saveResult(r)}catch(e){$('error').textContent='Hasil selesai, tetapi gagal disimpan ke riwayat lokal.'}
+   updateGauge('UPLOAD',u/1e6);$('state').dataset.state='done';$('state').textContent=t('done');$('start').disabled=false;$('start').textContent=t('retry');
+   try{saveResult(r)}catch(e){$('error').textContent=t('historySavedError')}
   };
   test.play();
- }catch(e){$('error').textContent='Engine gagal dijalankan: '+e.message;$('state').textContent='GAGAL';$('start').disabled=false}
+ }catch(e){$('error').textContent=t('engineError')+e.message;$('state').dataset.state='failed';$('state').textContent=t('failed');$('start').disabled=false}
 };
 $('start').addEventListener('click',()=>{
  if(window.AndroidAds&&typeof window.AndroidAds.requestInterstitial==='function'){
@@ -191,8 +214,10 @@ $('start').addEventListener('click',()=>{
   window.startSpeedTestFromAndroid();
  }
 });
-$('clearHistory').addEventListener('click',()=>{if(confirm('Hapus semua riwayat pengujian yang tersimpan di perangkat ini?')){localStorage.removeItem(HISTORY_KEY);renderHistory()}});
+$('clearHistory').addEventListener('click',()=>{if(confirm(t('clearConfirm')){localStorage.removeItem(HISTORY_KEY);renderHistory()}});
 window.addEventListener('online',updateNetwork);window.addEventListener('offline',updateNetwork);
 (navigator.connection||navigator.mozConnection||navigator.webkitConnection)?.addEventListener?.('change',updateNetwork);
 renderHistory();updateNetwork();loadIpInfo();
+$('languageSelect').addEventListener('change',e=>applyLanguage(e.target.value));
+applyLanguage(currentLang);
 </script></body></html>
