@@ -197,7 +197,7 @@ window.startSpeedTestFromAndroid=()=>{
    else if(d>0){$('state').textContent=t('downloadTesting');updateGauge('DOWNLOAD',d/1e6)}
    if(Number.isFinite(p))$('latency').textContent=p.toFixed(1)+' ms';if(Number.isFinite(j))$('jitter').textContent=j.toFixed(1)+' ms';
   };
-  test.onError=message=>{$('error').textContent=t('partialError')+message};
+  test.onError=message=>{$('error').textContent=t('partialError')};
   test.onFinish=r=>{
    const d=r.getDownloadBandwidth(),u=r.getUploadBandwidth(),p=r.getUnloadedLatency(),j=r.getUnloadedJitter();
    $('download').textContent=d>0?(d/1e6).toFixed(2)+' Mbps':'Tidak tersedia';$('upload').textContent=u>0?(u/1e6).toFixed(2)+' Mbps':'Tidak tersedia';
@@ -206,7 +206,7 @@ window.startSpeedTestFromAndroid=()=>{
    try{saveResult(r)}catch(e){$('error').textContent=t('historySavedError')}
   };
   test.play();
- }catch(e){$('error').textContent=t('engineError')+e.message;$('state').dataset.state='failed';$('state').textContent=t('failed');$('start').disabled=false}
+ }catch(e){$('error').textContent=t('engineError');$('state').dataset.state='failed';$('state').textContent=t('failed');$('start').disabled=false}
 };
 $('start').addEventListener('click',()=>{
  if(window.AndroidAds&&typeof window.AndroidAds.requestInterstitial==='function'){
