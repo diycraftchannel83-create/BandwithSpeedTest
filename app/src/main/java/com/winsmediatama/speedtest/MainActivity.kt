@@ -13,10 +13,14 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.google.android.gms.ads.MobileAds
 import androidx.activity.ComponentActivity
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
@@ -37,6 +41,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         appOpenAdManager = AppOpenAdManager(this)
         interstitialAdManager = InterstitialAdManager(this)
         MobileAds.initialize(this) {
@@ -130,7 +135,10 @@ private fun SpeedTestWebScreen(
     var loading by remember { mutableStateOf(true) }
 
     Box(
-        modifier = Modifier.fillMaxSize().background(Color(0xFF081426)),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFF081426))
+            .windowInsetsPadding(WindowInsets.safeDrawing),
         contentAlignment = Alignment.Center
     ) {
         AndroidView(
